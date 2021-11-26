@@ -1,0 +1,32 @@
+.header-toolbar, .login-button, .user-button{
+    background-color: black;    
+}
+
+.nav-link-login{
+    width: 80px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    text-decoration-line: none;
+    text-transform: none;
+    font-family:'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+.nav-link-user{
+    text-align: center;
+    width: 80px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    text-decoration-line: none;
+    text-transform: none;
+    font-family:'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+.user-name{
+    color: white;
+}
