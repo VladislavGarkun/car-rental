@@ -37,3 +37,21 @@
     background-color: white;
     color: black;
 }
+
+.pass{
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pass2{
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/*.userName, .password{*/
+/*    display: inline-grid;*/
+/*    flex-direction: row;*/
+/*    flex-wrap: wrap;*/
+/*}*/

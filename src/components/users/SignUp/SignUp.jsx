@@ -7,13 +7,15 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 export default function SignUp(){
-    const[name, setName] = useState('');
-    const onNameChange = (event) => setName(event.target.value);
+    const[firstName, setFirstName] = useState('');
+    const onNameChange = (event) => setFirstName(event.target.value);
 
-    const[surname, setSurname] = useState('');
-    const onSurnameChange = (event) => setSurname(event.target.value);
+    const[lastName, setLastName] = useState('');
+    const onSurnameChange = (event) => setLastName(event.target.value);
 
     const[userName, setUserName] = useState('');
     const onUserNameChange = (event) => setUserName(event.target.value);
@@ -30,6 +32,31 @@ export default function SignUp(){
     const[phone, setPhone] = useState('');
     const onPhoneChange = (event) => setPhone(event.target.value);
 
+    const navigate = useNavigate();
+
+    function registration() {
+        //axios.defaults.withCredentials = true;
+        axios.post("http://localhost:8081/v2/user/registration", {
+            userName: userName,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+            passwordRepeat: passwordRepeat,
+            phone: phone
+        })
+            .then(function (response) {
+                console.log(response);
+                //errorLable = "Invalid username/password supplied"
+                //alert(response.data.body.mess)
+                navigate(`/user-home/${response.data.userName}`)
+            })
+            .catch(function (error) {
+                console.log(error);
+
+            });
+    }
+
     return (
     <>
         <Box sx={{ flexGrow: 1 }} >
@@ -45,7 +72,7 @@ export default function SignUp(){
         </Box>
         <div className = 'signUp'>
             <TextField
-                value={name}
+                value={firstName}
                 onChange={onNameChange}
                 margin="normal"
                 size="string"
@@ -55,7 +82,7 @@ export default function SignUp(){
                 placeholder="Name"
             />
             <TextField
-                value={surname}
+                value={lastName}
                 onChange={onSurnameChange}
                 margin= "normal"
                 required
@@ -108,7 +135,9 @@ export default function SignUp(){
                 label="Required"
                 placeholder="Phone number"
             />
-            <Button color='inherit'><NavLink to={`/user-home/${userName}`} className="nav-link-signup">Register</NavLink></Button>
+
+            <Button onClick={registration} color='inherit'>Register</Button>
+            {/*<Button color='inherit'><NavLink to={`/user-home/${userName}`} className="nav-link-signup">Register</NavLink></Button>*/}
             <NavLink to="/signin" className="nav-link-registred">Already regisred?</NavLink>
         </div>
     </>
