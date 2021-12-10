@@ -1,4 +1,4 @@
-.signUp{
+.sign-in{
     margin-top: 5%;
     margin-left: auto;
     margin-right: auto;
@@ -9,7 +9,7 @@
     flex-wrap: wrap;
 }
 
-.nav-link-signup{
+.button-sign-in, .nav-link-home{
     width: 80px;
     height: 30px;
     border-radius: 5px;
@@ -36,4 +36,27 @@
 .nav-link-registred{
     background-color: white;
     color: black;
+}
+
+.pass{
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pass2{
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.info-string{
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-label{
+    margin-top: auto;
+    margin-bottom: auto;
 }

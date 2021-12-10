@@ -1,4 +1,4 @@
-.signIn{
+.signUp{
     margin-top: 5%;
     margin-left: auto;
     margin-right: auto;
@@ -9,7 +9,7 @@
     flex-wrap: wrap;
 }
 
-.nav-link-signin, .nav-link-home{
+.button-sign-up{
     width: 80px;
     height: 30px;
     border-radius: 5px;
@@ -37,21 +37,3 @@
     background-color: white;
     color: black;
 }
-
-.pass{
-    display: inline-block;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-.pass2{
-    display: inline-block;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-/*.userName, .password{*/
-/*    display: inline-grid;*/
-/*    flex-direction: row;*/
-/*    flex-wrap: wrap;*/
-/*}*/

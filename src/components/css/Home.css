@@ -2,7 +2,7 @@
     background-color: black;    
 }
 
-.nav-link-login{
+.nav-link-button{
     width: 80px;
     height: 30px;
     border-radius: 5px;
@@ -29,4 +29,18 @@
 
 .user-name{
     color: white;
+}
+
+.nav-link-cars{
+    /*background-color: white;*/
+    color: black;
+    text-decoration: none;
+}
+
+.grid-car{
+    margin: 0.5%;
+}
+
+.table-header{
+    background: gray;
 }

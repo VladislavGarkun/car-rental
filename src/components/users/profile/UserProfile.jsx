@@ -1,40 +1,22 @@
-import { useParams } from "react-router";
+import {useNavigate, useParams} from "react-router";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { NavLink } from "react-router-dom";
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { TextField } from "@mui/material"
 import Button from '@mui/material/Button';
-import '../../CSS/Profile.css'
+import '../../css/Profile.css'
+import * as React from "react";
+import axios from "axios";
 
 export default function() {
-    const[name, setName] = useState('');
-    const onNameChange = (event) => setName(event.target.value);
-
-    const[surname, setSurname] = useState('');
-    const onSurnameChange = (event) => setSurname(event.target.value);
-
-    const[userNameP, setUserNameP] = useState('');
-    const onUserNamePChange = (event) => setUserNameP(event.target.value);
     
-    const[email, setEmail] = useState('');
-    const onEmailChange = (event) => setEmail(event.target.value);
-
-    const[password, setPassword] = useState('');
-    const onPasswordChange = (event) => setPassword(event.target.value);
-
-    const[passwordRepeat, setPasswordRepeat] = useState('');
-    const onPasswordRepeatChange = (event) => setPasswordRepeat(event.target.value);
-
-    const[phone, setPhone] = useState('');
-    const onPhoneChange = (event) => setPhone(event.target.value);
-
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -46,6 +28,66 @@ export default function() {
     };
 
     const {userName} = useParams();
+
+    const navigate = useNavigate();
+
+    const[user, setUser] = useState({
+        user: {
+            id: '',
+            userRole: {
+                id: '',
+                role: ''
+            },
+            userName: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            phone: ''
+        },
+    })
+    const onUserChange = (userData) => setUser(userData)
+
+        useEffect(() => {
+        axios.get(`http://localhost:8081/v2/user/${userName}`)
+            .then(function (response) {
+                console.log(response.data);
+                onUserChange(response.data)
+            })
+            .catch(function (error) {
+                //console.log(error.response.data);
+            });
+    },[]);
+
+    function saveEdit() {
+        axios.put("http://localhost:8081/v2/user", {
+            id: user.id,
+            userRole: {
+                id: user.userRole.id,
+                role: user.userRole.role
+            },
+            userName: user.userName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            password: user.password,
+            passwordRepeat: user.passwordRepeat,
+            phone: user.phone
+        })
+            .then(function (response) {
+                console.log(response);
+                navigate(`/userhome/${response.data.userName}`)
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+            });
+    }
+
+    function handle(e) {
+        const newData = {...user}
+        newData[e.target.id] = e.target.value
+        setUser(newData)
+    }
 
     return(
         <Box sx={{ flexGrow: 1 }} >
@@ -85,8 +127,9 @@ export default function() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem /*onClick={handleClose}*/><NavLink to={`/user-home/${userName}`} className="nav-link-user">Home</NavLink></MenuItem>
-                            <MenuItem /*onClick={handleClose}*/><NavLink to="/" className="nav-link-user">Logout</NavLink></MenuItem>
+                            <MenuItem><NavLink to={`/userhome/${userName}`} className="nav-link-user">Home</NavLink></MenuItem>
+                            <MenuItem><NavLink to={`/user/orders/${userName}`} className="nav-link-user">Orders</NavLink></MenuItem>
+                            <MenuItem><NavLink to="/" className="nav-link-user">Logout</NavLink></MenuItem>
                         </Menu>
                     </div>
                 </Toolbar>
@@ -94,74 +137,63 @@ export default function() {
             
             <div className = 'profile-info'>
                 <TextField
-                    value={name}
-                    onChange={onNameChange}
+                    value={user.firstName}
+                    id="firstName"
+                    onChange={(e) => handle(e)}
                     margin="normal"
                     size="string"
                     required
-                    id="outlined-required"
-                    label="Required"
+                    label="Name"
                     placeholder="Name"
                 />
                 <TextField
-                    value={surname}
-                    onChange={onSurnameChange}
+                    value={user.lastName}
+                    id="lastName"
+                    onChange={(e) => handle(e)}
                     margin= "normal"
                     required
-                    id="outlined-required"
-                    label="Required"
+                    label="Surname"
                     placeholder="Surname"
                 />
                 <TextField
-                    value={userNameP}
-                    onChange={onUserNamePChange}
+                    value={user.userName}
+                    id="userName"
+                    onChange={(e) => handle(e)}
                     margin= "normal"
                     required
-                    id="outlined-required"
-                    label="Required"
+                    label="User Name"
                     placeholder="User Name"
                 />
                 <TextField
-                    value={email}
-                    onChange={onEmailChange}
+                    value={user.email}
+                    id="email"
+                    onChange={(e) => handle(e)}
                     margin= "normal"
                     required
-                    id="outlined-required"
-                    label="Required"
+                    label="Email"
                     placeholder="Email"
                 />
                 <TextField
-                    value={password}
-                    onChange={onPasswordChange}
+                    value={user.password}
+                    id="password"
+                    onChange={(e) => handle(e)}
                     margin= "normal"
                     required
-                    id="outlined-required"
-                    label="Required"
+                    label="Password"
                     placeholder="Password"
                 />
                 <TextField
-                    value={passwordRepeat}
-                    onChange={onPasswordRepeatChange}
+                    value={user.phone}
+                    id="phone"
+                    onChange={(e) => handle(e)}
                     margin= "normal"
                     required
-                    id="outlined-required"
-                    label="Required"
-                    placeholder="Repeat password"
-                />
-                <TextField
-                    value={phone}
-                    onChange={onPhoneChange}
-                    margin= "normal"
-                    required
-                    id="outlined-required"
-                    label="Required"
+                    label="Phone number"
                     placeholder="Phone number"
                 />
-                <Button color='inherit'><NavLink to={`/user-home/${userNameP}`} className="nav-link-signup">Save</NavLink></Button>
-                <NavLink to="/signin" className="nav-link-registred">Already regisred?</NavLink>
+                <Button onClick={saveEdit}><label className="save-button">Save</label></Button>
             </div>
 
         </Box>
     );
-    
 }

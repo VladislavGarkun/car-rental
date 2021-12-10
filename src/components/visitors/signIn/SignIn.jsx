@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material"
-import '../../CSS/SignIn.css'
+import '../../css/SignIn.css'
 import { NavLink } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { useState } from "react";
@@ -12,35 +12,43 @@ import { useNavigate } from "react-router";
 import * as React from "react";
 
 export default function SignIn(){
-  const[userName, setUserName] = useState('');
-  const onUserNameChange = (event) => setUserName(event.target.value);
 
-  const[password, setPassword] = useState('');
-  const onPasswordChange = (event) => setPassword(event.target.value);
+  const[signInData, setSignInData] = useState({
+      authData: {
+          userName: '',
+          password: ''
+      }
+  })
 
   const navigate = useNavigate();
 
-  const [errorLable, setErrorLabel] = useState('');
-  const onErrorLableChange = (message) => setErrorLabel(message);
+  const [errorLabel, setErrorLabel] = useState('');
+  const onErrorLabelChange = (message) => setErrorLabel(message);
 
   function authentication() {
     axios.post("http://localhost:8081/v2/user/login", {
-      userName: userName,
-      password: password,
+      userName: signInData.userName,
+      password: signInData.password,
     })
         .then(function (response) {
           console.log(response);
-          //errorLable = "Invalid username/password supplied"
-          //alert(response.data.body.mess)
-          navigate(`/user-home/${response.data.userName}`)
+          if(response.data.userRole.role === "USER") {
+              navigate(`/userhome/${response.data.userName}`)
+          }else{
+              navigate(`/adminhome/${response.data.userName}`)
+          }
+
         })
         .catch(function (error) {
-          //console.log(error);
-          //errorLable = "Invalid username/password supplied"
-            onErrorLableChange(error.response.data.mess);
-            //console.log(error.response.data);
+            onErrorLabelChange(error.response.data.mess);
         });
   }
+
+    function handle(e) {
+        const newData = {...signInData}
+        newData[e.target.id] = e.target.value
+        setSignInData(newData)
+    }
 
   return (
     <>
@@ -56,42 +64,34 @@ export default function SignIn(){
         </AppBar>
       </Box>
 
-      <div className = 'signIn'>
-
-          <label>User Name</label>
+      <div className = 'sign-in'>
           <TextField
-            value={userName}
-            onChange={onUserNameChange}
+            value={signInData.userName}
+            id="userName"
+            onChange={(e) => handle(e)}
             margin="normal"
             required
-            id="outlined-required"
-            label="Required"
+            label="User name"
             placeholder="User name"
           />
 
-
-
-          <label className='pass'>Password</label>
           <TextField
-              className='pass'
-            value={password}
-            onChange={onPasswordChange}
+            value={signInData.password}
+            id="password"
+            type="password"
+            onChange={(e) => handle(e)}
             margin="normal"
             required
-            id="outlined-required"
-            label="Required"
+            label="Password"
             placeholder="Password"
           />
 
-
-
-        <Button onClick={authentication} color='inherit'>Login</Button>
-
+          <Button onClick={authentication}><label className="button-sign-in">Login</label></Button>
 
         <NavLink to="/signup" className="nav-link-registred">Not regisred yet?</NavLink>
 
           <Typography variant="h6" component="div" align="left" sx={{ flexGrow: 1 }}>
-              {errorLable}
+              {errorLabel}
           </Typography>
 
       </div>
